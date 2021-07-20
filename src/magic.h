@@ -345,8 +345,8 @@ class spell
         // how much energy does the spell cost
         int energy_cost( const Character &guy ) const;
         // how long does this spell's effect last
-        int duration() const;
-        time_duration duration_turns() const;
+        int duration(const Character &guy) const;
+        time_duration duration_turns(const Character &guy) const;
         // how often does the spell fail
         // based on difficulty, level of spell, spellcraft skill, intelligence
         float spell_fail( const Character &guy ) const;
@@ -401,7 +401,7 @@ class spell
 
         std::string damage_string() const;
         std::string aoe_string() const;
-        std::string duration_string() const;
+        std::string duration_string(const Character &guy) const;
 
         // energy source enum
         energy_type energy_source() const;
@@ -414,7 +414,7 @@ class spell
         int get_difficulty() const;
 
         // tries to create a field at the location specified
-        void create_field( const tripoint &at ) const;
+        void create_field( const tripoint &at, const Character &guy) const;
 
         // makes a spell sound at the location
         void make_sound( const tripoint &target ) const;

@@ -561,7 +561,7 @@ int spell::min_leveled_duration() const
     return type->min_duration + std::round( get_level() * type->duration_increment );
 }
 
-int spell::duration() const
+int spell::duration(const Character &guy) const
 {
     const int leveled_duration = min_leveled_duration();
 
@@ -570,26 +570,26 @@ int spell::duration() const
                     type->max_duration ) );
     } else {
         if( type->max_duration >= type->min_duration ) {
-            return std::min( leveled_duration, type->max_duration );
+            return (std::min( leveled_duration, type->max_duration ) * guy.mutation_value("spell_duration_multiplier"));
         } else {
-            return std::max( leveled_duration, type->max_duration );
+            return (std::max( leveled_duration, type->max_duration ) * guy.mutation_value("spell_duration_multiplier"));
         }
     }
 }
 
-std::string spell::duration_string() const
+std::string spell::duration_string(const Character &guy) const
 {
     if( has_flag( spell_flag::RANDOM_DURATION ) ) {
         return string_format( "%s - %s", moves_to_string( min_leveled_duration() ),
                               moves_to_string( type->max_duration ) );
     } else {
-        return moves_to_string( duration() );
+        return moves_to_string( duration(guy) );
     }
 }
 
-time_duration spell::duration_turns() const
+time_duration spell::duration_turns(const Character &guy) const
 {
-    return 1_turns * duration() / 100;
+    return 1_turns * duration(guy) / 100;
 }
 
 void spell::gain_level()
@@ -638,6 +638,9 @@ int spell::energy_cost( const Character &guy ) const
     } else {
         cost = type->base_energy_cost;
     }
+
+    cost *= guy.mutation_value("energy_cost_multiplier");
+
     if( !has_flag( spell_flag::NO_HANDS ) ) {
         // the first 10 points of combined encumbrance is ignored, but quickly adds up
         const int hands_encumb = std::max( 0, guy.encumb( bp_hand_l ) + guy.encumb( bp_hand_r ) - 10 );
@@ -711,6 +714,9 @@ int spell::casting_time( const Character &guy ) const
     } else {
         casting_time = type->base_casting_time;
     }
+
+    casting_time *= guy.mutation_value("casting_time_multiplier");
+
     if( !has_flag( spell_flag::NO_LEGS ) ) {
         // the first 20 points of encumbrance combined is ignored
         const int legs_encumb = std::max( 0, guy.encumb( bp_leg_l ) + guy.encumb( bp_leg_r ) - 20 );
@@ -892,7 +898,7 @@ bool spell::bp_is_affected( body_part bp ) const
     return type->affected_bps[bp];
 }
 
-void spell::create_field( const tripoint &at ) const
+void spell::create_field( const tripoint &at, const Character &guy) const
 {
     if( !type->field ) {
         return;
@@ -907,7 +913,7 @@ void spell::create_field( const tripoint &at ) const
         if( field ) {
             field->set_field_intensity( field->get_field_intensity() + intensity );
         } else {
-            g->m.add_field( at, *type->field, intensity, -duration_turns() );
+            g->m.add_field( at, *type->field, intensity, -duration_turns(guy) );
         }
     }
 }
@@ -1431,7 +1437,9 @@ int known_magic::max_mana( const Character &guy ) const
     float mut_add = guy.mutation_value( "mana_modifier" );
     int natural_cap = std::max( 0.0f, ( ( mana_base + int_bonus ) * mut_mul ) + mut_add );
 
-    int bp_penalty = units::to_kilojoule( guy.get_power_level() );
+    int bp_penalty = std::round(std::max(0.0f,
+        units::to_kilojoule(guy.get_power_level()) *
+        guy.mutation_value("bionic_mana_penalty")));
     int ench_bonus = guy.bonus_from_enchantments( natural_cap, enchant_vals::mod::MANA_CAP, true );
 
     return std::max( 0, natural_cap - bp_penalty + ench_bonus );
@@ -1623,7 +1631,7 @@ static std::string enumerate_spell_data( const spell &sp )
     return enumerate_as_string( spell_data );
 }
 
-void spellcasting_callback::draw_spell_info( const spell &sp, const uilist *menu )
+void spellcasting_callback::draw_spell_info( const spell &sp, const uilist *menu)
 {
     const int h_offset = menu->w_width - menu->pad_right + 1;
     // includes spaces on either side for readability
@@ -1763,8 +1771,8 @@ void spellcasting_callback::draw_spell_info( const spell &sp, const uilist *menu
 
     // todo: damage over time here, when it gets implemeted
 
-    print_colored_text( w_menu, point( h_col1, line++ ), gray, gray, sp.duration() <= 0 ? "" :
-                        string_format( "%s: %s", _( "Duration" ), sp.duration_string() ) );
+    print_colored_text( w_menu, point( h_col1, line++ ), gray, gray, sp.duration(g->u) <= 0 ? "" :
+                        string_format( "%s: %s", _( "Duration" ), sp.duration_string(g->u) ) );
 }
 
 bool known_magic::set_invlet( const spell_id &sp, int invlet, const std::set<int> &used_invlets )

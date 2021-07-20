@@ -397,7 +397,7 @@ static void add_effect_to_target( const tripoint &target, const spell &sp )
     efftype_id spell_effect( sp.effect_data() );
 
     // TODO: migrate duration from moves to time_duration
-    const int dur_turns = sp.duration() / 100;
+    const int dur_turns = sp.duration(g->u) / 100;
     // Ensure permanent effect has at last 1 second of duration,
     // so it won't be instantly removed as expired.
     time_duration dur_td = ( spell_effect->is_permanent() && dur_turns == 0 )
@@ -427,7 +427,7 @@ static void damage_targets( const spell &sp, Creature &caster,
             continue;
         }
         sp.make_sound( target );
-        sp.create_field( target );
+        sp.create_field( target, g->u);
         Creature *const cr = g->critter_at<Creature>( target );
         if( !cr ) {
             continue;
@@ -684,7 +684,7 @@ void spell_effect::spawn_ethereal_item( const spell &sp, Creature &caster, const
 {
     item granted( sp.effect_data(), calendar::turn );
     if( !granted.is_comestible() && !( sp.has_flag( spell_flag::PERMANENT ) && sp.is_max_level() ) ) {
-        granted.set_var( "ethereal", to_turns<int>( sp.duration_turns() ) );
+        granted.set_var( "ethereal", to_turns<int>( sp.duration_turns(g->u) ) );
         granted.set_flag( "ETHEREAL_ITEM" );
     }
     if( granted.count_by_charges() && sp.damage() > 0 ) {
@@ -770,7 +770,7 @@ void spell_effect::timed_event( const spell &sp, Creature &caster, const tripoin
     }
 
     sp.make_sound( caster.pos() );
-    g->timed_events.add( spell_event, calendar::turn + sp.duration_turns() );
+    g->timed_events.add( spell_event, calendar::turn + sp.duration_turns(g->u) );
 }
 
 static bool is_summon_friendly( const spell &sp )
@@ -811,7 +811,7 @@ void spell_effect::spawn_summoned_monster( const spell &sp, Creature &caster,
     std::set<tripoint> area = spell_effect_area( sp, target, spell_effect_blast, caster );
     // this should never be negative, but this'll keep problems from happening
     size_t num_mons = std::abs( sp.damage() );
-    const time_duration summon_time = sp.duration_turns();
+    const time_duration summon_time = sp.duration_turns(g->u);
     while( num_mons > 0 && !area.empty() ) {
         const size_t mon_spot = rng( 0, area.size() - 1 );
         auto iter = area.begin();
@@ -836,7 +836,7 @@ void spell_effect::spawn_summoned_vehicle( const spell &sp, Creature &caster,
     }
     if( vehicle *veh = g->m.add_vehicle( sp.summon_vehicle_id(), target, -90, 100, 0 ) ) {
         veh->magic = true;
-        const time_duration summon_time = sp.duration_turns();
+        const time_duration summon_time = sp.duration_turns(g->u);
         if( !sp.has_flag( spell_flag::PERMANENT ) ) {
             veh->summon_time_limit = summon_time;
         }
@@ -952,8 +952,8 @@ void spell_effect::morale( const spell &sp, Creature &caster, const tripoint &ta
                ( player_target = g->critter_at<player>( potential_target ) ) ) ) {
             continue;
         }
-        player_target->add_morale( morale_type( sp.effect_data() ), sp.damage(), 0, sp.duration_turns(),
-                                   sp.duration_turns() / 10, false );
+        player_target->add_morale( morale_type( sp.effect_data() ), sp.damage(), 0, sp.duration_turns(g->u),
+                                   sp.duration_turns(g->u) / 10, false );
         sp.make_sound( potential_target );
     }
 }
@@ -972,7 +972,7 @@ void spell_effect::charm_monster( const spell &sp, Creature &caster, const tripo
         sp.make_sound( potential_target );
         if( mon->friendly == 0 && mon->get_hp() <= sp.damage() ) {
             mon->unset_dest();
-            mon->friendly += sp.duration() / 100;
+            mon->friendly += sp.duration(g->u) / 100;
         }
     }
 }
