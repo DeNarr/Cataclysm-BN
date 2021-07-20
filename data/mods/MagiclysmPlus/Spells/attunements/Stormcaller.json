@@ -1,0 +1,31 @@
+[
+  {
+    "type": "SPELL",
+    "id": "lightning_swap",
+    "name": "Lighting Swap",
+    "description": "With a streak of lightning, you appear at the targeted location, stunning all monsters in between, and swapping places with any at the final location.",
+    "effect": "line_attack",
+	"effect_str": "stunned",
+	"extra_effects": [ { "id": "teleport_temp_summon", "hit_self": false } ],
+    "damage_type": "electric",
+    "spell_class": "STORMCALLER",
+    "max_level": 35,
+    "min_damage": 10,
+    "max_damage": 350,
+    "damage_increment": 10,
+    "min_range": 6,
+    "max_range": 16,
+	"range_increment": 0.5,
+    "energy_source": "MANA",
+    "base_energy_cost": 500,
+    "base_casting_time": 100,
+    "difficulty": 4,
+	"field_id": "fd_electricity",
+    "field_chance": 3,
+    "min_field_intensity": 1,
+    "max_field_intensity": 1,
+    "flags": [ "LOUD", "SOMATIC", "NO_LEGS" ],
+    "sound_description": "a crackle",
+    "valid_targets": [ "ground", "hostile" ]
+  }
+]

@@ -874,7 +874,7 @@
     "max_damage": 10000,
     "effect": "mutate",
     "shape": "blast",
-    "effect_str": "STORM_CALLER",
+    "effect_str": "STORMCALLER",
     "flags": [ "SILENT", "MUTATE_TRAIT" ]
   },
   {

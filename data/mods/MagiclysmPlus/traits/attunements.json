@@ -708,6 +708,7 @@
     "prereqs": [ "STORMSHAPER", "DRUID" ],
     "dodge_modifier": 2.0,
     "energy_cost_multiplier": 0.75,
+	"spells_learned": [ [ "lightning_swap", 5 ] ],
     "cancels": [
       "ARTIFICER",
       "CRUSADER",
