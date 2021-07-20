@@ -1,0 +1,22 @@
+[
+  {
+    "id": "aura_werewolf",
+    "type": "SPELL",
+    "name": "Shape Change: Werewolf",
+    "description": "You change into a werewolf",
+    "valid_targets": [ "none" ],
+    "flags": [ "VERBAL", "CONCENTRATE" ],
+    "effect": "spawn_item",
+    "effect_str": "aura_werewolf",
+    "spell_class": "SHAPESHIFTER",
+    "energy_source": "MANA",
+    "base_casting_time": 500,
+    "base_energy_cost": 500,
+    "max_level": 35,
+    "min_damage": 1,
+    "max_damage": 1,
+    "min_duration": 360000,
+    "max_duration": 1440000,
+    "duration_increment": 40115
+  }
+]

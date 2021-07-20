@@ -1,0 +1,24 @@
+[
+  {
+    "id": "crystallize_mana",
+    "type": "SPELL",
+    "name": "Crystallize Mana",
+    "description": "Crystallizes mana into solid form",
+    "valid_targets": [ "self" ],
+    "spell_class": "NONE",
+    "flags": [ "PERMANENT", "NO_LEGS", "CONCENTRATE" ],
+    "difficulty": 3,
+    "min_damage": 1,
+    "max_damage": 1,
+    "duration_increment": 1,
+    "max_level": 1,
+    "effect": "spawn_item",
+    "effect_str": "crystallized_mana",
+    "energy_source": "MANA",
+    "base_energy_cost": 1000,
+    "final_energy_cost": 1000,
+    "base_casting_time": 60000,
+    "final_casting_time": 60000,
+    "extra_effects": [ { "id": "mana_fatigue" } ]
+  }
+]

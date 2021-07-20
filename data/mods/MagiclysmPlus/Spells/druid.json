@@ -1,0 +1,21 @@
+[
+  {
+    "id": "recover_fatigue",
+    "type": "SPELL",
+    "name": "Nature's Trance",
+    "description": "Your connection to living things allows you to go into a magical trance.  This allows you to recover fatige quickly in exchange for mana.",
+    "valid_targets": [ "self" ],
+    "flags": [ "CONCENTRATE", "SILENT", "NO_HANDS" ],
+    "spell_class": "DRUID",
+    "energy_source": "MANA",
+    "effect": "recover_energy",
+    "effect_str": "FATIGUE",
+    "base_casting_time": 1000,
+    "min_damage": 100,
+    "damage_increment": 36.0,
+    "max_damage": 1000,
+    "max_level": 25,
+    "base_energy_cost": 500,
+    "difficulty": 4
+  }
+]

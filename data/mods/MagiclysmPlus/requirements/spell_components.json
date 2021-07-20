@@ -1,0 +1,7 @@
+[
+  {
+    "id": "spell_components_samsara",
+    "type": "requirement",
+    "components": [ [ [ "rune_druid", 1 ] ] ]
+  }
+]

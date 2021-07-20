@@ -1,0 +1,27 @@
+[
+  {
+    "id": "mon_after_image",
+    "looks_like": "mon_prototype_cyborg",
+    "type": "MONSTER",
+    "name": { "str": "after image" },
+    "description": "This is an animate shadow.  Looking like nothing more than an errant patch of normal shadow, it draws your attention by the way it moves subtly and whispers softly in the back of your mind.  Strange intrusive thoughts accompany the quiet murmur, awakening your most horrific memories and fears.",
+    "default_faction": "nether",
+    "categories": [ "CLASSIC" ],
+    "species": [ "HALLUCINATION" ],
+    "diff": 2,
+    "volume": "750 ml",
+    "weight": "1 kg",
+    "hp": 1,
+    "speed": 80,
+    "symbol": "A",
+    "color": "dark_gray",
+    "aggression": 100,
+    "morale": 100,
+    "armor_cut": 3,
+    "vision_night": 50,
+    "harvest": "exempt",
+    "special_attacks": [ [ "DISAPPEAR", 200 ] ],
+    "death_function": [ "DISAPPEAR" ],
+    "flags": [ "PACIFIST", "SEES", "NOHEAD", "HARDTOSHOOT", "WEBWALK", "FLIES", "PLASTIC", "ACIDPROOF", "NO_BREATHE", "NOGIB" ]
+  }
+]

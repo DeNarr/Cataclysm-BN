@@ -1,0 +1,12 @@
+[
+  {
+    "type": "MOD_INFO",
+    "id": "magiclysmPlus",
+    "name": "Magiclysm Plus",
+    "authors": [ "Ryan \"DeNarr\" Saige" ],
+    "maintainers": [ "DeNarr" ],
+    "description": "Expands upon the Magiclysm mod. Adds Attunements via crafting. Also adds additional spells, items, and recipes.",
+    "category": "content",
+    "dependencies": [ "dda", "magiclysm" ]
+  }
+]
